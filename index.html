@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Will You Be My Valentine? 💖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffd6e8, #fff0f6, #ffe8f0);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Hearts Background */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            animation: floatHeart 15s infinite ease-in-out;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: #d4578a;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            opacity: 0;
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: #e85d9a;
+            margin-bottom: 20px;
+            opacity: 0;
+        }
+
+        /* NO Video Container - IMAGES/VIDEOS ABOVE BUTTONS */
+        .no-image-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 5px 0 15px 0;
+            position: relative;
+        }
+
+        .no-video {
+            max-width: 100%;
+            max-height: 180px;
+            width: auto;
+            border-radius: 24px;
+            box-shadow: 0 15px 30px rgba(212, 87, 138, 0.25);
+            border: 4px solid white;
+            display: none;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .no-video.active {
+            display: block;
+            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0) rotate(-10deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .no-message {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+            color: #d4578a;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 2px solid white;
+            box-shadow: 0 8px 20px rgba(212, 87, 138, 0.2);
+            margin-top: 0;
+            display: inline-block;
+        }
+
+        /* Button Container - BUTTONS BELOW VIDEOS */
+        .button-container {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            font-size: 1.2rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(212, 87, 138, 0.3);
+            position: relative;
+        }
+
+        .btn-no {
+            background: white;
+            color: #d4578a;
+            border: 2px solid #ffc0db;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff6ba9, #ff8dc7);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(212, 87, 138, 0.4);
+        }
+
+        .btn-yes:hover {
+            background: linear-gradient(135deg, #ff5a98, #ff7cb6);
+        }
+
+        /* Yes Section */
+        .yes-section {
+            display: none;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .yes-section.active {
+            display: flex;
+        }
+
+        .yes-message {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            color: #d4578a;
+            margin-bottom: 40px;
+            opacity: 0;
+        }
+
+        .yes-video {
+            max-width: 500px;
+            width: 90%;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(212, 87, 138, 0.3);
+            opacity: 0;
+            border: 5px solid white;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff6ba9;
+            position: absolute;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Love Cards Section */
+        .love-cards-section {
+            display: none;
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .love-cards-section.active {
+            display: block;
+        }
+
+        .love-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px auto;
+            max-width: 600px;
+            box-shadow: 0 15px 40px rgba(212, 87, 138, 0.2);
+            border: 2px solid rgba(255, 192, 219, 0.5);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .love-card p {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            color: #d4578a;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Tic Tac Toe Section */
+        .game-section {
+            display: none;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-section.active {
+            display: block;
+        }
+
+        .game-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            color: #d4578a;
+            margin-bottom: 50px;
+        }
+
+        .ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto 30px;
+        }
+
+        .ttt-cell {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 3px solid #ffc0db;
+            border-radius: 20px;
+            font-size: clamp(2rem, 5vw, 3rem);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .ttt-cell:hover:not(.taken) {
+            background: rgba(255, 192, 219, 0.3);
+            transform: scale(1.05);
+        }
+
+        .ttt-cell.taken {
+            cursor: not-allowed;
+        }
+
+        .game-message {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: #e85d9a;
+            margin-top: 30px;
+            min-height: 60px;
+        }
+
+        .reset-btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #ff6ba9, #ff8dc7);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(212, 87, 138, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer p {
+            font-size: 1.2rem;
+            color: #d4578a;
+        }
+
+        .heart-beat {
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+        }
+
+        /* Heart Burst */
+        .heart-burst {
+            position: fixed;
+            font-size: 30px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: burstHeart 2s ease-out forwards;
+        }
+
+        @keyframes burstHeart {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(3) rotate(360deg);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .button-container {
+                gap: 15px;
+                margin-top: 0;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+
+            .ttt-board {
+                max-width: 300px;
+                gap: 10px;
+            }
+
+            .love-card {
+                padding: 30px 20px;
+            }
+            
+            .no-video {
+                max-height: 150px;
+            }
+            
+            .hero h1 {
+                margin-bottom: 10px;
+                font-size: clamp(1.8rem, 4vw, 2.2rem);
+            }
+            
+            .hero p {
+                margin-bottom: 15px;
+                font-size: clamp(1rem, 2.5vw, 1.3rem);
+            }
+            
+            .no-image-container {
+                margin: 0 0 10px 0;
+            }
+            
+            .no-message {
+                padding: 6px 16px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .no-video {
+                max-height: 130px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+        }
+        
+        /* Video playback settings */
+        video {
+            outline: none;
+        }
+        
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+        
+        video::-webkit-media-controls-enclosure {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="heroSection">
+        <h1 id="heroTitle">From the moment you walked into my life, everything changed…</h1>
+        <p id="heroSubtitle">Will you be my Valentine? 💖</p>
+        
+        <!-- NO Videos - REPLACE THESE WITH YOUR .mp4 URLs -->
+        <div class="no-image-container" id="noImageContainer">
+            <!-- 
+                ⚠️ REPLACE THESE WITH YOUR OWN .mp4 FILES ⚠️
+                Just paste any .mp4 URL between the src quotes
+                You can host videos on: Imgur, Cloudinary, Google Drive, or your own server
+            -->
+            <video id="noVideo1" class="no-video" src="https://res.cloudinary.com/duq0zgyjt/video/upload/v1770814197/1_iraapb.mp4" loop muted playsinline autoplay></video>
+            <video id="noVideo2" class="no-video" src="https://res.cloudinary.com/duq0zgyjt/video/upload/v1770814198/3_kz8joj.mp4" loop muted playsinline autoplay></video>
+            <video id="noVideo3" class="no-video" src="https://res.cloudinary.com/duq0zgyjt/video/upload/v1770814197/2_vwhe06.mp4" loop muted playsinline autoplay></video>
+            <div id="noMessage" class="no-message">💗</div>
+        </div>
+        
+        <!-- BUTTONS - BUTTONS BELOW VIDEOS -->
+        <div class="button-container" id="buttonContainer">
+            <button class="btn btn-no" id="noBtn" onclick="handleNo()">💔 NO</button>
+            <button class="btn btn-yes" id="yesBtn" onclick="handleYes()">💖 YES</button>
+        </div>
+    </section>
+
+    <!-- Yes Section -->
+    <section class="yes-section" id="yesSection">
+        <h1 class="yes-message" id="yesMessage">You just made me the happiest person alive ❤️</h1>
+        <!-- ⚠️ REPLACE THIS WITH YOUR HAPPY .mp4 URL ⚠️ -->
+        <video id="yesVideo" class="yes-video" src="https://res.cloudinary.com/duq0zgyjt/video/upload/v1770814197/4_j9mm0k.mp4" loop muted playsinline autoplay></video>
+    </section>
+
+    <!-- Love Cards Section -->
+    <section class="love-cards-section" id="loveCardsSection">
+        <div class="love-card">
+            <p>"Loving you is my favorite part of life."</p>
+        </div>
+        <div class="love-card">
+            <p>"You turned my ordinary days into magic."</p>
+        </div>
+        <div class="love-card">
+            <p>"If I had to choose again, it would still be you."</p>
+        </div>
+        <div class="love-card">
+            <p>"You're my peace in chaos."</p>
+        </div>
+        <div class="love-card">
+            <p>"Forever doesn't sound long enough with you."</p>
+        </div>
+    </section>
+
+    <!-- Tic Tac Toe Game -->
+    <section class="game-section" id="gameSection">
+        <h2 class="game-title">One last challenge before you officially become my Valentine 💕</h2>
+        <div class="ttt-board" id="tttBoard">
+            <div class="ttt-cell" onclick="playerMove(0)"></div>
+            <div class="ttt-cell" onclick="playerMove(1)"></div>
+            <div class="ttt-cell" onclick="playerMove(2)"></div>
+            <div class="ttt-cell" onclick="playerMove(3)"></div>
+            <div class="ttt-cell" onclick="playerMove(4)"></div>
+            <div class="ttt-cell" onclick="playerMove(5)"></div>
+            <div class="ttt-cell" onclick="playerMove(6)"></div>
+            <div class="ttt-cell" onclick="playerMove(7)"></div>
+            <div class="ttt-cell" onclick="playerMove(8)"></div>
+        </div>
+        <div class="game-message" id="gameMessage">You're ❌, I'm ⭕. Your turn!</div>
+        <button class="reset-btn" onclick="resetGame()">Play Again</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Made with all my love <span class="heart-beat">❤️</span></p>
+    </footer>
+
+    <script>
+        // ===== MP4 VIDEOS - ADD YOUR VIDEO URLs HERE =====
+        // Just paste your .mp4 URLs between the quotes below
+        
+       const NO_VIDEOS = {
+    1: "https://res.cloudinary.com/duq0zgyjt/video/upload/v1770814197/1_iraapb.mp4",
+    2: "https://res.cloudinary.com/duq0zgyjt/video/upload/v1770814198/3_kz8joj.mp4",
+    3: "https://res.cloudinary.com/duq0zgyjt/video/upload/v1770814197/2_vwhe06.mp4"
+};
+
+const YES_VIDEO = "https://res.cloudinary.com/duq0zgyjt/video/upload/v1770814197/4_j9mm0k.mp4"; // 👈 PASTE YOUR HAPPY .mp4 URL HERE (celebration video for YES)
+        
+        // Set video sources
+        document.getElementById('noVideo1').src = NO_VIDEOS[1];
+        document.getElementById('noVideo2').src = NO_VIDEOS[2];
+        document.getElementById('noVideo3').src = NO_VIDEOS[3];
+        document.getElementById('yesVideo').src = YES_VIDEO;
+        
+        // Create floating hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('heartsContainer');
+            const hearts = ['💖', '💕', '💗', '💓', '💝'];
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+            }
+        }
+
+        // GSAP Animations on load
+        window.addEventListener('load', () => {
+            createFloatingHearts();
+            
+            gsap.to('#heroTitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: 'power3.out'
+            });
+
+            gsap.to('#heroSubtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 0.5,
+                ease: 'power3.out'
+            });
+
+            gsap.fromTo('#buttonContainer', 
+                { opacity: 0, scale: 0.8 },
+                { opacity: 1, scale: 1, duration: 1, delay: 1, ease: 'back.out(1.7)' }
+            );
+            
+            // Hide all no videos initially
+            document.getElementById('noVideo1').classList.remove('active');
+            document.getElementById('noVideo2').classList.remove('active');
+            document.getElementById('noVideo3').classList.remove('active');
+            document.getElementById('noMessage').textContent = '💗';
+            
+            // Preload videos and ensure they play
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.addEventListener('loadeddata', function() {
+                    this.play().catch(e => console.log('Auto-play prevented:', e));
+                });
+            });
+        });
+
+        // No button logic
+        let noCount = 0;
+        let noButtonScale = 1;
+        let yesButtonScale = 1;
+        
+        const modalTexts = [
+            "Are you sureeee? 🥺",
+            "My heart can't take this 💔",
+            "System error… 'No' is not an option 😤"
+        ];
+
+        function handleNo() {
+            noCount++;
+            
+            // Get video elements
+            const video1 = document.getElementById('noVideo1');
+            const video2 = document.getElementById('noVideo2');
+            const video3 = document.getElementById('noVideo3');
+            const messageEl = document.getElementById('noMessage');
+            
+            // Hide all videos first
+            video1.classList.remove('active');
+            video2.classList.remove('active');
+            video3.classList.remove('active');
+            
+            // Pause all videos
+            [video1, video2, video3].forEach(v => v.pause());
+            
+            // Show the appropriate video and message based on count
+            if (noCount === 1) {
+                video1.classList.add('active');
+                video1.currentTime = 0;
+                video1.play().catch(e => console.log('Play failed:', e));
+                messageEl.textContent = modalTexts[0];
+            } else if (noCount === 2) {
+                video2.classList.add('active');
+                video2.currentTime = 0;
+                video2.play().catch(e => console.log('Play failed:', e));
+                messageEl.textContent = modalTexts[1];
+            } else if (noCount === 3) {
+                video3.classList.add('active');
+                video3.currentTime = 0;
+                video3.play().catch(e => console.log('Play failed:', e));
+                messageEl.textContent = modalTexts[2];
+            } else {
+                // After 3, cycle through videos
+                const cycleIndex = (noCount - 1) % 3;
+                if (cycleIndex === 0) {
+                    video1.classList.add('active');
+                    video1.currentTime = 0;
+                    video1.play().catch(e => console.log('Play failed:', e));
+                    messageEl.textContent = modalTexts[0];
+                } else if (cycleIndex === 1) {
+                    video2.classList.add('active');
+                    video2.currentTime = 0;
+                    video2.play().catch(e => console.log('Play failed:', e));
+                    messageEl.textContent = modalTexts[1];
+                } else {
+                    video3.classList.add('active');
+                    video3.currentTime = 0;
+                    video3.play().catch(e => console.log('Play failed:', e));
+                    messageEl.textContent = modalTexts[2];
+                }
+            }
+
+            // Shrink NO button
+            noButtonScale -= 0.15;
+            if (noButtonScale < 0.4) noButtonScale = 0.4;
+            gsap.to('#noBtn', {
+                scale: noButtonScale,
+                duration: 0.3
+            });
+
+            // Grow YES button
+            yesButtonScale += 0.2;
+            if (yesButtonScale > 2) yesButtonScale = 2;
+            gsap.to('#yesBtn', {
+                scale: yesButtonScale,
+                duration: 0.3
+            });
+
+            // Swap positions randomly after 3rd click
+            if (noCount >= 3) {
+                const noBtn = document.getElementById('noBtn');
+                const yesBtn = document.getElementById('yesBtn');
+                
+                gsap.to([noBtn, yesBtn], {
+                    x: () => Math.random() * 100 - 50,
+                    y: () => Math.random() * 50 - 25,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+            }
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = Math.random() * 100 + '%';
+                confetti.style.background = ['#ff6ba9', '#ff8dc7', '#ffc0db', '#ffd700'][Math.floor(Math.random() * 4)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function createHeartBurst() {
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-burst';
+                heart.textContent = '💖';
+                heart.style.left = '50%';
+                heart.style.top = '50%';
+                heart.style.animationDelay = i * 0.05 + 's';
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 2000);
+            }
+        }
+
+        function handleYes() {
+            // Scroll to top immediately
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Create effects
+            createHeartBurst();
+            createConfetti();
+
+            // Flash effect
+            gsap.to('body', {
+                background: 'linear-gradient(135deg, #ff6ba9, #ff8dc7)',
+                duration: 0.5,
+                yoyo: true,
+                repeat: 1
+            });
+
+            // Hide hero, show yes section
+            gsap.to('#heroSection', {
+                opacity: 0,
+                y: -50,
+                duration: 0.8,
+                onComplete: () => {
+                    document.getElementById('heroSection').style.display = 'none';
+                    const yesSection = document.getElementById('yesSection');
+                    yesSection.classList.add('active');
+                    
+                    // Play yes video
+                    const yesVideo = document.getElementById('yesVideo');
+                    yesVideo.currentTime = 0;
+                    yesVideo.play().catch(e => console.log('Play failed:', e));
+
+                    // Animate yes section
+                    gsap.fromTo('#yesMessage', 
+                        { opacity: 0, scale: 0.5 },
+                        { opacity: 1, scale: 1, duration: 1.5, ease: 'elastic.out(1, 0.5)' }
+                    );
+
+                    gsap.fromTo('#yesVideo', 
+                        { opacity: 0, y: 50 },
+                        { opacity: 1, y: 0, duration: 1.5, delay: 0.5, ease: 'power3.out' }
+                    );
+
+                    // Show love cards after delay
+                    setTimeout(() => {
+                        showLoveCards();
+                    }, 300);
+                }
+            });
+        }
+
+        function showLoveCards() {
+            const section = document.getElementById('loveCardsSection');
+            section.classList.add('active');
+            
+            const cards = document.querySelectorAll('.love-card');
+            cards.forEach((card, index) => {
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    delay: index * 0.3,
+                    ease: 'power3.out'
+                });
+            });
+
+            // Show game after all cards
+            setTimeout(() => {
+                showGame();
+            }, cards.length * 300 + 2000);
+        }
+
+        function showGame() {
+            const gameSection = document.getElementById('gameSection');
+            gameSection.classList.add('active');
+            
+            gsap.fromTo('.game-title', 
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
+            );
+
+            gsap.fromTo('.ttt-board', 
+                { opacity: 0, scale: 0.8 },
+                { opacity: 1, scale: 1, duration: 1, delay: 0.3, ease: 'back.out(1.7)' }
+            );
+        }
+
+        // Tic Tac Toe Game Logic
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6] // Diagonals
+        ];
+
+        function playerMove(index) {
+            if (!gameActive || board[index] !== '') return;
+
+            board[index] = '❌';
+            updateBoard();
+            
+            if (checkWin('❌')) {
+                celebrateWin();
+                return;
+            }
+
+            if (board.every(cell => cell !== '')) {
+                document.getElementById('gameMessage').textContent = "It's a tie! But you still win my heart 💕";
+                gameActive = false;
+                return;
+            }
+
+            setTimeout(() => aiMove(), 500);
+        }
+
+        function aiMove() {
+            const emptyCells = board.map((cell, idx) => cell === '' ? idx : null).filter(val => val !== null);
+            
+            if (emptyCells.length > 0) {
+                const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                board[randomIndex] = '⭕';
+                updateBoard();
+                
+                if (checkWin('⭕')) {
+                    document.getElementById('gameMessage').textContent = "Wait, that wasn't supposed to happen! 😅";
+                    gameActive = false;
+                }
+            }
+        }
+
+        function updateBoard() {
+            const cells = document.querySelectorAll('.ttt-cell');
+            cells.forEach((cell, index) => {
+                cell.textContent = board[index];
+                if (board[index] !== '') {
+                    cell.classList.add('taken');
+                    gsap.fromTo(cell, 
+                        { scale: 0, rotation: -180 },
+                        { scale: 1, rotation: 0, duration: 0.5, ease: 'back.out(1.7)' }
+                    );
+                } else {
+                    cell.classList.remove('taken');
+                }
+            });
+        }
+
+        function checkWin(player) {
+            return winPatterns.some(pattern => {
+                return pattern.every(index => board[index] === player);
+            });
+        }
+
+        function celebrateWin() {
+            gameActive = false;
+            document.getElementById('gameMessage').textContent = "Of course you win… you already won my heart ❤️";
+            createHeartBurst();
+            gsap.to('.ttt-board', {
+                scale: 1.1,
+                duration: 0.5,
+                yoyo: true,
+                repeat: 1
+            });
+        }
+
+        function resetGame() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            
+            const cells = document.querySelectorAll('.ttt-cell');
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('taken');
+            });
+            
+            document.getElementById('gameMessage').textContent = "You're ❌, I'm ⭕. Your turn!";
+            
+            gsap.fromTo('.ttt-board', 
+                { rotation: 360, scale: 0.8 },
+                { rotation: 0, scale: 1, duration: 0.8, ease: 'back.out(1.7)' }
+            );
+        }
+
+        // Expose functions to global scope
+        window.handleNo = handleNo;
+        window.handleYes = handleYes;
+        window.playerMove = playerMove;
+        window.resetGame = resetGame;
+    </script>
+</body>
+</html>
